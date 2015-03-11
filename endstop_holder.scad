@@ -32,10 +32,19 @@ module endstop_holder() {
     difference() {
         union() {
             base();
-            translate([-nema_14_sides/2, -nema_14_sides/2, 0]) cube([thickness, nema_14_sides, endstop_mount_height]);
+            // endstop holder
+            translate([-nema_14_sides/2, -nema_14_sides/2, 0]) cube([thickness, nema_14_sides - 10, endstop_mount_height]);
+            // holder support
+            difference() {
+                translate([-nema_14_sides/2, -nema_14_sides/2 + thickness, 0]) rotate([0, 0, -90]) cube([thickness, nema_14_sides - 10, endstop_mount_height]);
+                translate([10, -nema_14_sides/2 + thickness * 2, 0]) rotate([45, 0, -90]) # cube([thickness* 2, 40, 40]);
+            }
+
         }
         // endstop holes
         for(i=[-1,1])
-            translate([-nema_14_sides/2, i*endstop_holes_spacing/2, endstop_holes_height]) rotate([0, 90, 0]) #cylinder(d=m2dot5_dia + clearance, h=thickness);
+            translate([-nema_14_sides/2, i*endstop_holes_spacing/2, endstop_holes_height]) rotate([0, 90, 0]) cylinder(d=m2dot5_dia + clearance, h=thickness);
+        // cutting the base in half
+        translate([nema_14_sides/2, nema_14_sides/2, thickness/2]) rotate([0, 0, 45]) cube([45, 45, thickness], center=true);
     }
 }
